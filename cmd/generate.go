@@ -3,8 +3,15 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
+	"io"
 
 	"github.com/spf13/cobra"
+)
+
+const (
+	problemTemplatePath = "template/problem.md"
+	textTemplatePath = "template/text.md"
 )
 
 // generateCmd represents the generate command
