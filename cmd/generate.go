@@ -37,6 +37,32 @@ func init() {
 
 
 func generate(cmd *cobra.Command, args []string) {
+	numProblems, outputDirPath, problemsOutputDirPath := getGenCmdArgs(cmd)
+
+	// ディレクトリを作成
+	err := os.MkdirAll(problemsOutputDirPath, 0777)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	// 資料を生成する
+	err = generateText(outputDirPath)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	// 問題を生成する
+	problemTemplate := readProblemTemplates()
+	for i := 0; i < numProblems; i++ {
+		generateProblem(problemsOutputDirPath, problemTemplate, i + 1)
+	}
+
+	fmt.Printf("%d個の問題を生成しました。\n", numProblems)
+	fmt.Printf("生成先: %s\n", outputDirPath)
+}
+
 // 問題テンプレートファイルを読み込んで文字列を返す
 func readProblemTemplates() (string) {
 	problemString, err := makeFileContentToString(problemTemplatePath)
