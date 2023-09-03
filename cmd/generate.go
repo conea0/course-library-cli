@@ -75,6 +75,49 @@ func makeFileContentToString(path string) (string, error) {
 
 	return string(content), nil
 }
+
+// 問題を生成する
+func generateProblem(path string, problemTemplate string, num int) {
+	// テンプレートファイルを読み込む
+
+	fileName := fmt.Sprintf("%s/%v.md", path , num)
+
+	// ファイルを作成
+	problemFile, err := os.Create(fileName)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	defer problemFile.Close()
+
+	// ファイルに書き込む
+	head := fmt.Sprintf("# %v", num)
+	fmt.Fprintf(problemFile, head)
+	fmt.Fprintf(problemFile, problemTemplate)
+}
+
+// 資料を生成する
+func generateText(dirPath string) error {
+	// テンプレートファイルを読み込む
+	textString, err := makeFileContentToString(textTemplatePath)
+	if err != nil {
+		return err
+	}
+
+	// ファイルを作成
+	outputPath := filepath.Join(dirPath, "text.md")
+	textFile, err := os.Create(outputPath)
+	if err != nil {
+		return err
+	}
+	defer textFile.Close()
+
+	// ファイルに書き込む
+	fmt.Fprintf(textFile, textString)
+
+	return nil
+}
+
 // コマンドライン引数を取得する
 func getGenCmdArgs(cmd *cobra.Command) (int, string, string) {
 	numProblems, err := cmd.Flags().GetInt("num")
