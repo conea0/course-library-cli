@@ -1,4 +1,4 @@
-module github.com/teke4869/cli/course-library-cli
+module github.com/teke4869/course-library-cli
 
 go 1.21.0
 
