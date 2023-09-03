@@ -37,6 +37,44 @@ func init() {
 
 
 func generate(cmd *cobra.Command, args []string) {
+// 問題テンプレートファイルを読み込んで文字列を返す
+func readProblemTemplates() (string) {
+	problemString, err := makeFileContentToString(problemTemplatePath)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	return problemString
+}
+
+// 資料テンプレートファイルを読み込んで文字列を返す
+func readTextTemplates() (string) {
+	textString, err := makeFileContentToString(textTemplatePath)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	return textString
+}
+
+// ファイルの内容を文字列にして返す
+func makeFileContentToString(path string) (string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+
+	defer file.Close()
+
+	content, err := io.ReadAll(file)
+	if err != nil {
+		return "", err
+	}
+
+	return string(content), nil
+}
 // コマンドライン引数を取得する
 func getGenCmdArgs(cmd *cobra.Command) (int, string, string) {
 	numProblems, err := cmd.Flags().GetInt("num")
