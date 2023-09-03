@@ -37,15 +37,21 @@ func init() {
 
 
 func generate(cmd *cobra.Command, args []string) {
-	num, err := cmd.Flags().GetInt("num")
+// コマンドライン引数を取得する
+func getGenCmdArgs(cmd *cobra.Command) (int, string, string) {
+	numProblems, err := cmd.Flags().GetInt("num")
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	path, err := cmd.Flags().GetString("path")
+
+	outputDirPath, err := cmd.Flags().GetString("path")
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	fmt.Println(num, path)
+
+	problemsOutputDirPath := filepath.Join(outputDirPath, "problems")
+
+	return numProblems, outputDirPath, problemsOutputDirPath
 }
