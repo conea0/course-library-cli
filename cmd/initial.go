@@ -12,8 +12,8 @@ var initCmd = &cobra.Command{
 	Short: "A brief description of your command",
 
 	Run: func(cmd *cobra.Command, args []string) {
-		str :="# 001\n\nここはmarkdownを自由に記述できる。\n\nここまで---\n\n## 問題\n\n## テストケース\n\n## 模範回答"
-		str2 :="# 001\n\nここはmarkdownを自由に記述できる。"
+		str :="template/problem.md"
+		str2 :="template/text.md"
 		// ファイルを作成
 		 err := os.MkdirAll("part1/001/problems", 0777)
 		 if err != nil {
