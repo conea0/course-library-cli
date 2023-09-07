@@ -1,4 +1,4 @@
-module github.com/teke4869/course-library-cli
+module clc
 
 go 1.21.0
 
