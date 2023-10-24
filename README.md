@@ -31,6 +31,36 @@ clc init
 clc g ./part1/002 -n 20
 ```
 
+## 実装予定
+
+### outputの自動生成
+テストケースにinputを書けば、outputを自動生成することができます。
+[output自動生成の仕様](https://github.com/conea0/course-library-cli/wiki/output%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%81%AE%E4%BB%95%E6%A7%98)を参照してください。
+
+#### partごとの出力
+```sh
+clc output ./part1/001/problems
+```
+
+#### 問題ごとの出力
+```sh
+clc output -p ./part1/001/problems/1.md
+```
+
+### outputの削除
+テストケースのoutputのみを削除します。
+#### partごとの削除
+```sh
+clc clean ./part1/001/problems
+```
+
+#### 問題ごとの削除
+```sh
+clc clean -p ./part1/001/problems/1.md
+```
+
+## 未実装
+
 ### ローカルでテスト
 
 作成した資料と問題が、course-libraryのプラットフォーム上に正しく反映され、動作するのかをローカルで検証することができます。
