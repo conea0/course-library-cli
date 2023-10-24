@@ -24,6 +24,7 @@ var textTemplate string
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
 	Use:   "generate",
+	Aliases: []string{"g"},
 	Short: "コース作成に必要なファイルを生成します。",
 	Run:   generate,
 }
