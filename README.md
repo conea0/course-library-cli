@@ -35,7 +35,7 @@ clc g ./part1/002 -n 20
 
 ### outputの自動生成
 テストケースにinputを書けば、outputを自動生成することができます。
-[output自動生成の仕様](https://github.com/conea0/course-library-cli/wiki/output%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%81%AE%E4%BB%95%E6%A7%98)を参照してください。
+[問題文の仕様]([https://github.com/conea0/course-library-cli/wiki/output%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%81%AE%E4%BB%95%E6%A7%98](https://github.com/conea0/python-basic-course/wiki/%E5%95%8F%E9%A1%8C%E6%96%87%E3%81%AE%E4%BB%95%E6%A7%98)を参照してください。
 
 #### partごとの出力
 ```sh
