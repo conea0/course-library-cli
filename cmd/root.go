@@ -14,7 +14,7 @@ var rootCmd = &cobra.Command{
 	Use:   "clc",
 	Short: "course-libraryに登録するコース作成を支援するcliツールです。🍗",
 	Long: `course-libraryに登録するコース作成を支援するcliツールです。🍗
-		コース作成に必要なファイルを生成したり、テストしたりします。`,
+	コース作成に必要なファイルを生成したり、テストしたりします。`,
 
 }
 
@@ -28,13 +28,6 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
