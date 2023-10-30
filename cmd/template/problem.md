@@ -1,50 +1,39 @@
-
+# 1
 ---
 ## 問題
 
-nに数値を代入して、1からnまでの偶数のリストと、奇数のリストを出力してください。
+配列を二つ入力させ、その配列の要素数を足した結果を出力しなさい。
+
+### inputの方法
+配列のinputは`1 2 3 4`という形式で行われる。
+これをpythonの配列にするために、以下のコードを利用してよい。
+```python
+a = list(map(int, input().split()))
+```
 
 ## テストケース
-input = int
-```
+```json
 [
 	{
-		"input": [10],
-		"output": [
-			[2,4,6,8,10],
-			[1,3,5,7,9]
-		]
-  	},
+		"inputs": 
+		[
+			"1 2 3",
+			"3 4 5"
+		],
+	},
 	{
-		"input": [5],
-		"output": [
-			[2,4],
-			[1,3,5]
-		]
-  	},
-	{
-		"input": [12],
-		"output": [
-			[2,4,6,8,10,12],
-			[1,3,5,7,9,11]
-		]
-  	},
+		"inputs":
+		[
+			"a b c",
+			"aa bb cc"
+		],
+	}
 ]
 ```
-
-
 ## 模範回答
 ```python
-n = get_input()
-even = []
-odd = []
-
-for i in range(1,n+1):
-	if i % 2 == 0:
-		even.append(i)
-	else:
-		odd.append(i)
-
-print(even)
-print(odd)
+A = list(map(int, input().split()))
+B = list(map(int, input().split()))
+lenA, lenB = len(A), len(B)
+print(lenA + lenB)
 ```
