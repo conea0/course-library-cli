@@ -10,11 +10,11 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
+
 	Use:   "clc",
 	Short: "course-libraryに登録するコース作成を支援するcliツールです。🍗",
 	Long: `course-libraryに登録するコース作成を支援するcliツールです。🍗
 	コース作成に必要なファイルを生成したり、テストしたりします。`,
-
 
 }
 
