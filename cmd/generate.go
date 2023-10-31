@@ -9,12 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	// embedを指定した場所からの相対パス
-	problemTemplatePath = "template/problem.md"
-	textTemplatePath    = "template/text.md"
-)
-
 //go:embed template/problem.md
 var problemTemplate string
 
@@ -23,10 +17,10 @@ var textTemplate string
 
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
-	Use:   "generate",
+	Use:     "generate",
 	Aliases: []string{"g"},
-	Short: "コース作成に必要なファイルを生成します。",
-	Run:   generate,
+	Short:   "コース作成に必要なファイルを生成します。",
+	Run:     generate,
 }
 
 func init() {
@@ -79,8 +73,8 @@ func generateProblem(path string, problemTemplate string, num int) {
 
 	// ファイルに書き込む
 	head := fmt.Sprintf("# %v", num)
-	fmt.Fprintf(problemFile, head)
-	fmt.Fprintf(problemFile, problemTemplate)
+	fmt.Fprint(problemFile, head)
+	fmt.Fprint(problemFile, problemTemplate)
 }
 
 // 資料を生成する
