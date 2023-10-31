@@ -48,3 +48,39 @@ func TestTestCaseFromJSONError(t *testing.T) {
 		})
 	}
 }
+
+// test EvalTest Function
+func TestEvalTest(t *testing.T) {
+	testCases := []struct {
+		name string
+		test Test
+		py   string
+	}{
+		{
+			name: "one input",
+			test: Test{
+				Input:  &[]string{"1 2 3"},
+				Output: nil,
+			},
+			py: "print(input())",
+		},
+		{
+			name: "multi input",
+			test: Test{
+				Input:  &[]string{"1 2 3", "3 4 5"},
+				Output: nil,
+			},
+			py: "print(input())\nprint(input())",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.test.EvalTest(tc.py)
+			fmt.Print(*(tc.test.Output))
+			if err != nil {
+				t.Errorf("EvalTest() error = %v, wantErr %v", err, false)
+			}
+		})
+	}
+}
