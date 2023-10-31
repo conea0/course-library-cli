@@ -2,6 +2,9 @@ package problems
 
 import (
 	"encoding/json"
+	"fmt"
+	"os"
+	"os/exec"
 )
 
 type Test struct {
@@ -70,5 +73,15 @@ func (t *Test) EvalTest(py string) error {
 	// テスト結果をtcに格納する
 	t.Output = &output
 
+	return nil
+}
+
+func (tc *TestCase) EvalTests(py string) error {
+	for _, t := range tc.Tests {
+		err := t.EvalTest(py)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
