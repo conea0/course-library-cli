@@ -15,7 +15,7 @@ a = list(map(int, input().split()))
 ```json
 [
 	{
-		"inputs": 
+		"input":
 		[
 			"1 2 3",
 			"3 4 5"
