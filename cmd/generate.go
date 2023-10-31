@@ -88,7 +88,7 @@ func generateText(dirPath string) error {
 	defer textFile.Close()
 
 	// ファイルに書き込む
-	fmt.Fprintf(textFile, textTemplate)
+	fmt.Fprint(textFile, textTemplate)
 
 	return nil
 }
