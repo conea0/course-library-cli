@@ -5,12 +5,27 @@ import (
 )
 
 type Test struct {
-	Input  []string `json:"input"`
-	Output string   `json:"output"`
+	Input  *[]string `json:"input"`
+	Output *string   `json:"output"`
 }
 
 type TestCase struct {
-	Tests []Test
+	Tests []Test `json:"tests"`
+}
+
+func NewTestCase(tests []Test) TestCase {
+	return TestCase{
+		Tests: tests,
+	}
+}
+
+func TestCaseFromJSON(jsonBytes []byte) (TestCase, error) {
+	var testCase TestCase
+	if err := json.Unmarshal(jsonBytes, &testCase); err != nil {
+		return testCase, err
+	}
+
+	return testCase, nil
 }
 
 func (tc TestCase) String() string {
