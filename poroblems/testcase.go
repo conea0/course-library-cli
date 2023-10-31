@@ -13,22 +13,22 @@ type TestCase struct {
 	Tests []Test `json:"tests"`
 }
 
-func NewTestCase(tests []Test) TestCase {
-	return TestCase{
+func NewTestCase(tests []Test) *TestCase {
+	return &TestCase{
 		Tests: tests,
 	}
 }
 
-func TestCaseFromJSON(jsonBytes []byte) (TestCase, error) {
-	var testCase TestCase
-	if err := json.Unmarshal(jsonBytes, &testCase); err != nil {
-		return testCase, err
+func TestCaseFromJSON(jsonBytes []byte) (*TestCase, error) {
+	var testCase *TestCase
+	err := json.Unmarshal(jsonBytes, &testCase)
+	if err != nil {
+		return nil, err
 	}
-
 	return testCase, nil
 }
 
-func (tc TestCase) String() string {
+func (tc *TestCase) String() string {
 	// テストケースをJSON形式にエンコードする
 	tcJSON, err := json.MarshalIndent(tc.Tests, "", "\t")
 	if err != nil {
