@@ -39,7 +39,7 @@ clc generate -p ./part1/002 -n 20
 
 #### partごとの出力
 ```sh
-clc output ./part1/001/problems
+clc output -p ./part1/001/problems
 ```
 
 #### 問題ごとの出力
@@ -51,7 +51,7 @@ clc output -p ./part1/001/problems/1.md
 テストケースのoutputのみを削除します。
 #### partごとの削除
 ```sh
-clc clean ./part1/001/problems
+clc clean -p ./part1/001/problems
 ```
 
 #### 問題ごとの削除
