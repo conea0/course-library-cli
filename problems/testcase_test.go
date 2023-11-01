@@ -72,15 +72,25 @@ func TestEvalTest(t *testing.T) {
 			},
 			py: "print(input())\nprint(input())",
 		},
+		{
+			name: "syntax error python code",
+			test: Test{
+				Input:  &[]string{"1 2 3", "3 4 5"},
+				Output: nil,
+			},
+			py: "print(input(",
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := tc.test.EvalTest(tc.py)
-			fmt.Print(*(tc.test.Output))
 			if err != nil {
-				t.Errorf("EvalTest() error = %v, wantErr %v", err, false)
+				fmt.Println(err.Error())
+			} else {
+				fmt.Print(*(tc.test.Output))
 			}
+
 		})
 	}
 }

@@ -43,7 +43,7 @@ func (t *Test) EvalTest(py string) error {
 	// 受け取ったPythonコードをファイルに書き込む
 	fp, err := os.Create("tmp.py")
 	if err != nil {
-		return err
+		return fmt.Errorf("cannot create tmp.py: %w", err)
 	}
 	defer os.Remove("tmp.py")
 	defer fp.Close()
@@ -55,7 +55,7 @@ func (t *Test) EvalTest(py string) error {
 
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
-		return err
+		return fmt.Errorf("cannot get stdin pipe: %w", err)
 	}
 	defer stdin.Close()
 
@@ -64,9 +64,9 @@ func (t *Test) EvalTest(py string) error {
 		fmt.Fprintln(stdin, str)
 	}
 
-	result, err := cmd.Output()
+	result, err := cmd.CombinedOutput()
 	if err != nil {
-		return err
+		return fmt.Errorf(string(result))
 	}
 	output := string(result)
 
