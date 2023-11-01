@@ -59,9 +59,9 @@ func (t *Test) EvalTest(py string) error {
 	}
 	defer stdin.Close()
 
+	// 標準入力に値を渡す
 	for _, str := range *t.Input {
 		fmt.Fprintln(stdin, str)
-		// stdin.Write([]byte(str))
 	}
 
 	result, err := cmd.Output()
@@ -77,6 +77,7 @@ func (t *Test) EvalTest(py string) error {
 }
 
 func (tc *TestCase) EvalTests(py string) error {
+	// テストケースを実行する
 	for _, t := range tc.Tests {
 		err := t.EvalTest(py)
 		if err != nil {
