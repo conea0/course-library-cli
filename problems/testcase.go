@@ -10,8 +10,8 @@ import (
 )
 
 type Test struct {
-	Input  *[]any `json:"input"`
-	Output *string   `json:"output"`
+	Input  *[]any  `json:"input"`
+	Output *string `json:"output"`
 }
 
 type TestCase struct {
@@ -80,8 +80,9 @@ func (t *Test) EvalTest(py string) error {
 
 func (tc *TestCase) EvalTests(py string) error {
 	// テストケースを実行する
-	for _, t := range tc.Tests {
-		err := t.EvalTest(py)
+	n := len(tc.Tests)
+	for i := 0; i < n; i++ {
+		err := (&tc.Tests[i]).EvalTest(py)
 		if err != nil {
 			return err
 		}
