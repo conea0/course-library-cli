@@ -7,40 +7,48 @@ import (
 	"strings"
 )
 
+// Problem is a struct that represents a problem in the course library.
 type Problem struct {
 	Statement string
 	TestCase  *TestCase
 	Code      string
 }
 
-
+// MdPrefix is a type alias for a string that represents a markdown prefix.
 type MdPrefix string
 
+// ReadBlockFn is a function type that reads a markdown block and updates a Problem struct.
 type ReadBlockFn func(*Problem) error
 
 const (
+	// StatementPre is a markdown prefix for the problem statement block.
 	StatementPre = "## 問題"
-	TestcasePre  = "## テストケース"
-	CodePre      = "## 模範回答"
+	// TestcasePre is a markdown prefix for the test case block.
+	TestcasePre = "## テストケース"
+	// CodePre is a markdown prefix for the code block.
+	CodePre = "## 模範回答"
 )
 
+// Md is a struct that represents a markdown file.
 type Md struct {
 	s []string
 
 	mdPrefixFns map[MdPrefix]ReadBlockFn
 
-	curr int
-	next int
+	curr int // the current line being read
+	next int // the next line to read
 
 	errors []error
 }
 
+// NewMd creates a new Md struct from an io.Reader.
 func NewMd(r io.Reader) *Md {
 	m := &Md{
 		errors:      []error{},
 		mdPrefixFns: make(map[MdPrefix]ReadBlockFn),
 	}
 
+	// read the file line by line and store it in a slice
 	scanner := bufio.NewScanner(r)
 	var s []string
 
@@ -55,6 +63,7 @@ func NewMd(r io.Reader) *Md {
 
 	m.s = s
 
+	// register each parsing function
 	m.registerReadBlockFn(StatementPre, m.readStatement)
 	m.registerReadBlockFn(TestcasePre, m.readTestcase)
 	m.registerReadBlockFn(CodePre, m.readCode)
@@ -62,10 +71,12 @@ func NewMd(r io.Reader) *Md {
 	return m
 }
 
+// Scan returns true if there are more lines to read.
 func (m *Md) Scan() bool {
 	return m.next < len(m.s)
 }
 
+// Text returns the current line and moves to the next line.
 func (m *Md) Text() string {
 	if m.next >= len(m.s) {
 		return ""
@@ -77,6 +88,7 @@ func (m *Md) Text() string {
 	return m.s[m.curr]
 }
 
+// Peek returns the next line without moving the cursor.
 func (m *Md) Peek() string {
 	if m.next >= len(m.s) {
 		return ""
@@ -85,10 +97,12 @@ func (m *Md) Peek() string {
 	return m.s[m.next]
 }
 
+// registerReadBlockFn registers a parsing function for a markdown prefix.
 func (m *Md) registerReadBlockFn(pre MdPrefix, fn ReadBlockFn) {
 	m.mdPrefixFns[pre] = fn
 }
 
+// ReadProblem reads a markdown file and returns a Problem struct.
 func (m *Md) ReadProblem() *Problem {
 	p := &Problem{}
 
@@ -104,8 +118,10 @@ func (m *Md) ReadProblem() *Problem {
 	return p
 }
 
+// readStatement reads the problem statement block and updates a Problem struct.
 func (m *Md) readStatement(p *Problem) error {
-	var existBlock bool
+	var existBlock bool // whether the block exists
+
 	for m.Scan() {
 		peekTxt := m.Peek()
 		if strings.HasPrefix(peekTxt, TestcasePre) {
@@ -125,6 +141,7 @@ func (m *Md) readStatement(p *Problem) error {
 	return nil
 }
 
+// readTestcase reads the test case block and updates a Problem struct.
 func (m *Md) readTestcase(p *Problem) error {
 	var s string
 	var blockIsEnded bool
@@ -157,7 +174,10 @@ func (m *Md) readTestcase(p *Problem) error {
 	return nil
 }
 
+// readCode reads the code block and updates a Problem struct.
 func (m *Md) readCode(p *Problem) error {
+	var blockIsEnded bool
+
 	if err := m.skipToCodeBlock("python"); err != nil {
 		return err
 	}
@@ -165,15 +185,23 @@ func (m *Md) readCode(p *Problem) error {
 	for m.Scan() {
 		txt := m.Peek()
 		if strings.HasPrefix(txt, "```") {
+			blockIsEnded = true
 			break
 		}
 
 		p.Code += m.Text() + "\n"
 	}
 
+	if !blockIsEnded {
+		err := fmt.Errorf("模範解答のコードブロックが閉じられていません")
+		m.errors = append(m.errors, err)
+		return err
+	}
+
 	return nil
 }
 
+// skipToCodeBlock skips lines until it finds a code block.
 func (m *Md) skipToCodeBlock(t string) error {
 	var existBlock bool
 	curr, next := m.curr, m.next
@@ -198,10 +226,12 @@ func (m *Md) skipToCodeBlock(t string) error {
 	return nil
 }
 
+// Err returns a slice of errors that occurred during parsing.
 func (m *Md) Err() []error {
 	return m.errors
 }
 
+// Error returns a string of all errors that occurred during parsing.
 func (m *Md) Error() string {
 	var s string
 	if len(m.Err()) == 0 {
