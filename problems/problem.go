@@ -35,3 +35,25 @@ type Md struct {
 	errors []error
 }
 
+func NewMd(r io.Reader) *Md {
+	m := &Md{
+		errors:      []error{},
+		mdPrefixFns: make(map[MdPrefix]ReadBlockFn),
+	}
+
+	scanner := bufio.NewScanner(r)
+	var s []string
+
+	for scanner.Scan() {
+		txt := scanner.Text()
+		s = append(s, txt)
+	}
+
+	if len(s) == 0 {
+		m.errors = append(m.errors, fmt.Errorf("問題文のファイルが空です"))
+	}
+
+	m.s = s
+
+	return m
+}
