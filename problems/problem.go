@@ -57,3 +57,26 @@ func NewMd(r io.Reader) *Md {
 
 	return m
 }
+
+func (m *Md) Scan() bool {
+	return m.next < len(m.s)
+}
+
+func (m *Md) Text() string {
+	if m.next >= len(m.s) {
+		return ""
+	}
+
+	m.curr = m.next
+	m.next++
+
+	return m.s[m.curr]
+}
+
+func (m *Md) Peek() string {
+	if m.next >= len(m.s) {
+		return ""
+	}
+
+	return m.s[m.next]
+}
