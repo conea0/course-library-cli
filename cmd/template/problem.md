@@ -10,7 +10,7 @@
 ```python
 a = list(map(int, input().split()))
 ```
-
+　
 ## テストケース
 ```json
 [
@@ -19,14 +19,14 @@ a = list(map(int, input().split()))
 		[
 			"1 2 3",
 			"3 4 5"
-		],
+		]
 	},
 	{
-		"inputs":
+		"input":
 		[
 			"a b c",
 			"aa bb cc"
-		],
+		]
 	}
 ]
 ```
