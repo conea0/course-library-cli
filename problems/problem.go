@@ -166,3 +166,26 @@ func (m *Md) readCode(p *Problem) error {
 	return nil
 }
 
+func (m *Md) skipToCodeBlock(t string) error {
+	var existBlock bool
+	curr, next := m.curr, m.next
+
+	for m.Scan() {
+		txt := m.Text()
+		expectPre := fmt.Sprintf("```%s", t)
+		if strings.HasPrefix(txt, expectPre) {
+			existBlock = true
+			break
+		}
+	}
+
+	if !existBlock {
+		m.curr, m.next = curr, next
+
+		err := fmt.Errorf("%sブロックが見つかりませんでした", t)
+		m.errors = append(m.errors, err)
+		return err
+	}
+
+	return nil
+}
