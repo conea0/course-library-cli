@@ -116,3 +116,35 @@ func (m *Md) readStatement(p *Problem) error {
 
 	return nil
 }
+
+func (m *Md) readTestcase(p *Problem) error {
+	var s string
+	var blockIsEnded bool
+
+	m.skipToCodeBlock("json")
+	for m.Scan() {
+		txt := m.Text()
+		if strings.HasPrefix(txt, "```") {
+			blockIsEnded = true
+			break
+		}
+
+		s += txt + "\n"
+	}
+
+	if !blockIsEnded {
+		err := fmt.Errorf("テストケースブロックが閉じられていません")
+		m.errors = append(m.errors, err)
+		return err
+	}
+
+	s = fmt.Sprintf(`{"tests": %s}`, s)
+	tcJSON, err := TestCaseFromJSON([]byte(s))
+	if err != nil {
+		m.errors = append(m.errors, err)
+		return fmt.Errorf("cannot read test case block: %w", err)
+	}
+
+	p.TestCase = tcJSON
+	return nil
+}
