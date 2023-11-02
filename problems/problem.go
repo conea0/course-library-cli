@@ -55,6 +55,10 @@ func NewMd(r io.Reader) *Md {
 
 	m.s = s
 
+	m.registerReadBlockFn(StatementPre, m.readStatement)
+	m.registerReadBlockFn(TestcasePre, m.readTestcase)
+	m.registerReadBlockFn(CodePre, m.readCode)
+
 	return m
 }
 
@@ -79,6 +83,10 @@ func (m *Md) Peek() string {
 	}
 
 	return m.s[m.next]
+}
+
+func (m *Md) registerReadBlockFn(pre MdPrefix, fn ReadBlockFn) {
+	m.mdPrefixFns[pre] = fn
 }
 
 func (m *Md) ReadProblem() *Problem {
