@@ -80,3 +80,18 @@ func (m *Md) Peek() string {
 
 	return m.s[m.next]
 }
+
+func (m *Md) ReadProblem() *Problem {
+	p := &Problem{}
+
+	for m.Scan() {
+		txt := m.Text()
+		for pre, fn := range m.mdPrefixFns {
+			if strings.HasPrefix(txt, string(pre)) {
+				fn(p)
+			}
+		}
+	}
+
+	return p
+}
