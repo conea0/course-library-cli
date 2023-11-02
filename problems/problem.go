@@ -148,3 +148,21 @@ func (m *Md) readTestcase(p *Problem) error {
 	p.TestCase = tcJSON
 	return nil
 }
+
+func (m *Md) readCode(p *Problem) error {
+	if err := m.skipToCodeBlock("python"); err != nil {
+		return err
+	}
+
+	for m.Scan() {
+		txt := m.Peek()
+		if strings.HasPrefix(txt, "```") {
+			break
+		}
+
+		p.Code += m.Text() + "\n"
+	}
+
+	return nil
+}
+
