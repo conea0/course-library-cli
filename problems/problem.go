@@ -189,3 +189,20 @@ func (m *Md) skipToCodeBlock(t string) error {
 
 	return nil
 }
+
+func (m *Md) Err() []error {
+	return m.errors
+}
+
+func (m *Md) Error() string {
+	var s string
+	if len(m.Err()) == 0 {
+		return ""
+	}
+
+	for _, err := range m.Err() {
+		s = fmt.Sprintf("%s\n%s", s, err.Error())
+	}
+
+	return s
+}
