@@ -95,3 +95,24 @@ func (m *Md) ReadProblem() *Problem {
 
 	return p
 }
+
+func (m *Md) readStatement(p *Problem) error {
+	var existBlock bool
+	for m.Scan() {
+		peekTxt := m.Peek()
+		if strings.HasPrefix(peekTxt, TestcasePre) {
+			existBlock = true
+			break
+		}
+
+		p.Statement += m.Text() + "\n"
+	}
+
+	if !existBlock {
+		err := fmt.Errorf("問題文のブロックが見つかりませんでした")
+		m.errors = append(m.errors, err)
+		return err
+	}
+
+	return nil
+}
