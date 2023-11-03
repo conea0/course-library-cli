@@ -18,6 +18,8 @@ func TestTestCaseFromJSON(t *testing.T) {
 		},
 		{
 			name: "valid json5",
+
+			// 末尾にコンマ
 			json: `{"tests": [{"input": ["1 2 3", "3 4 5",],}, {"input": ["a b c", "aa bb cc",],, "output": "some_output_value_2",},],}`,
 		},
 	}
