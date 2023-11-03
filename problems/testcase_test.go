@@ -66,7 +66,7 @@ func TestEvalTest(t *testing.T) {
 		{
 			name: "one input",
 			test: Test{
-				Input:  &[]string{"1 2 3"},
+				Input:  &[]any{"1 2 3"},
 				Output: nil,
 			},
 			py: "print(input())",
@@ -74,7 +74,7 @@ func TestEvalTest(t *testing.T) {
 		{
 			name: "multi input",
 			test: Test{
-				Input:  &[]string{"1 2 3", "3 4 5"},
+				Input:  &[]any{"1 2 3", "3 4 5"},
 				Output: nil,
 			},
 			py: "print(input())\nprint(input())",
@@ -82,7 +82,7 @@ func TestEvalTest(t *testing.T) {
 		{
 			name: "fail python code",
 			test: Test{
-				Input:  &[]string{"1 2 3", "3 4 5"},
+				Input:  &[]any{"1 2 3", "3 4 5"},
 				Output: nil,
 			},
 			py: "print(input(",

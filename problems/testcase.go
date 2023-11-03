@@ -10,7 +10,7 @@ import (
 )
 
 type Test struct {
-	Input  *[]string `json:"input"`
+	Input  *[]any `json:"input"`
 	Output *string   `json:"output"`
 }
 
