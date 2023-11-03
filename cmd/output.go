@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"clc/problems"
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
+
+	yaml "gopkg.in/yaml.v2"
 
 	"github.com/spf13/cobra"
 )
@@ -26,21 +27,20 @@ func init() {
 func output(cmd *cobra.Command, args []string) {
 	path, err := cmd.Flags().GetString("path")
 	if err != nil {
-		fmt.Fprint(os.Stderr, "実行失敗: %w", err)
+		fmt.Fprintf(os.Stderr, "実行失敗: %v", err)
 	}
 
 	paths, err := getMdPaths(path)
 	if err != nil {
-		fmt.Fprint(os.Stderr, "実行失敗: %w", err)
+		fmt.Fprintf(os.Stderr, "実行失敗: %v", err)
 	}
-
-	fmt.Print(paths)
 
 	for _, f := range paths {
 		err := exportProblemJSON(f)
 		if err != nil {
+			fmt.Fprintln(os.Stderr, "---------------------------------------ここから")
 			fmt.Fprintf(os.Stderr, "エラーが発生しました\n場所: %v\n%v\n", f, err)
-			fmt.Fprintln(os.Stderr, "------------------")
+			fmt.Fprintln(os.Stderr, "---------------------------------------ここまで")
 		}
 	}
 }
@@ -51,7 +51,7 @@ func getMdPaths(path string) ([]string, error) {
 
 	// mdファイルが指定された場合はそのまま返す
 	ex := filepath.Ext(path)
-	if ex == "md" {
+	if ex == ".md" {
 		filenames = append(filenames, path)
 		return filenames, nil
 	}
@@ -64,7 +64,7 @@ func getMdPaths(path string) ([]string, error) {
 	for _, f := range files {
 		// mdファイルでない場合はスキップ
 		ext := filepath.Ext(f.Name())
-		if ext != "md" {
+		if ext != ".md" {
 			continue
 		}
 
@@ -72,15 +72,22 @@ func getMdPaths(path string) ([]string, error) {
 		filenames = append(filenames, fullpath)
 	}
 
-	if len(files) == 0 {
+	if len(filenames) == 0 {
 		return []string{}, fmt.Errorf("指定されたディレクトリにファイルが存在しません")
 	}
 
 	return filenames, nil
 }
 
-func getOutDir(mdPath string) string {
-	return filepath.Join(filepath.Dir(mdPath), "out")
+func getOutDir(mdPath string) (string, error) {
+	dir := filepath.Join(filepath.Dir(mdPath), "out")
+	if f, err := os.Stat(dir); os.IsNotExist(err) || !f.IsDir() {
+		if err := os.Mkdir(dir, 0777); err != nil {
+			return "", err
+		}
+	}
+
+	return dir, nil
 }
 
 func exportProblemJSON(f string) error {
@@ -88,6 +95,8 @@ func exportProblemJSON(f string) error {
 	if err != nil {
 		return err
 	}
+
+	defer file.Close()
 
 	md := problems.NewMd(file)
 
@@ -101,17 +110,28 @@ func exportProblemJSON(f string) error {
 		return err
 	}
 
-	strJSON, err := json.Marshal(p)
+	problemyaml, err := yaml.Marshal(p)
 	if err != nil {
 		return fmt.Errorf("jsonの出力に失敗しました: %w", err)
 	}
 
-	outDir := getOutDir(f)
-	outFile, err := os.Create(outDir)
+	outDir, err := getOutDir(f)
+	if err != nil {
+		return fmt.Errorf("ディレクトリの作成に失敗しました: %w", err)
+	}
+
+	yamlName := getFileNameWithoutExt(f) + ".yaml"
+	fullpath := filepath.Join(outDir, yamlName)
+	outFile, err := os.Create(fullpath)
 	if err != nil {
 		return fmt.Errorf("ファイルの作成に失敗しました: %w", err)
 	}
-	fmt.Fprint(outFile, strJSON)
+
+	fmt.Fprint(outFile, string(problemyaml))
 
 	return nil
+}
+
+func getFileNameWithoutExt(path string) string {
+    return filepath.Base(path[:len(path)-len(filepath.Ext(path))])
 }
