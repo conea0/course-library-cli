@@ -32,7 +32,15 @@ func output(cmd *cobra.Command, args []string) {
 		fmt.Fprint(os.Stderr, "実行失敗: %w", err)
 	}
 
-	outDir := getOutDir(paths[0])
+	fmt.Print(paths)
+
+	for _, f := range paths {
+		err := exportProblemJSON(f)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "エラーが発生しました\n場所: %v\n%v\n", f, err)
+			fmt.Fprintln(os.Stderr, "------------------")
+		}
+	}
 }
 
 // 指定されたディレクトリから.mdのファイルを抽出してフルパスを取得
