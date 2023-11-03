@@ -80,3 +80,36 @@ func getMdPaths(path string) ([]string, error) {
 func getOutDir(mdPath string) string {
 	return filepath.Join(filepath.Dir(mdPath), "out")
 }
+
+func exportProblemJSON(f string) error {
+	file, err := os.Open(f)
+	if err != nil {
+		return err
+	}
+
+	md := problems.NewMd(file)
+
+	p := md.ReadProblem()
+	if len(md.Err()) != 0 {
+		return fmt.Errorf(md.Error())
+	}
+
+	tc := p.TestCase
+	if err := tc.EvalTests(p.Code); err != nil {
+		return err
+	}
+
+	strJSON, err := json.Marshal(p)
+	if err != nil {
+		return fmt.Errorf("jsonの出力に失敗しました: %w", err)
+	}
+
+	outDir := getOutDir(f)
+	outFile, err := os.Create(outDir)
+	if err != nil {
+		return fmt.Errorf("ファイルの作成に失敗しました: %w", err)
+	}
+	fmt.Fprint(outFile, strJSON)
+
+	return nil
+}
