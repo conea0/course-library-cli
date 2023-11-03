@@ -14,7 +14,12 @@ func TestTestCaseFromJSON(t *testing.T) {
 	}{
 		{
 			name: "valid json",
-			json: `{"tests": [{"input": ["1 2 3", "3 4 5"]}, {"input": ["a b c", "aa bb cc"], "output": "some_output_value_2"}]}`},
+			json: `{"tests": [{"input": ["1 2 3", "3 4 5"]}, {"input": ["a b c", "aa bb cc"], "output": "some_output_value_2"}]}`,
+		},
+		{
+			name: "valid json5",
+			json: `{"tests": [{"input": ["1 2 3", "3 4 5",],}, {"input": ["a b c", "aa bb cc",],, "output": "some_output_value_2",},],}`,
+		},
 	}
 
 	for _, tc := range testCases {
