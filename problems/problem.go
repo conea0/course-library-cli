@@ -128,7 +128,7 @@ func (m *Md) readStatement(p *Problem) error {
 
 	for m.Scan() {
 		peekTxt := m.Peek()
-		if strings.HasPrefix(peekTxt, TestcasePre) {
+		if strings.HasPrefix(peekTxt, TestcasePre) || strings.HasPrefix(peekTxt, HelpPre) {
 			existBlock = true
 			break
 		}
@@ -140,6 +140,19 @@ func (m *Md) readStatement(p *Problem) error {
 		err := fmt.Errorf("問題文のブロックが見つかりませんでした")
 		m.errors = append(m.errors, err)
 		return err
+	}
+
+	return nil
+}
+
+func (m *Md) readHelp(p *Problem) error {
+	for m.Scan() {
+		peekTxt := m.Peek()
+		if strings.HasPrefix(peekTxt, TestcasePre) {
+			break
+		}
+
+		p.Help += m.Text() + "\n"
 	}
 
 	return nil
