@@ -5,6 +5,7 @@ go 1.21.0
 require (
 	github.com/spf13/cobra v1.7.0
 	github.com/stretchr/testify v1.8.4
+	github.com/titanous/json5 v1.0.0
 )
 
 require (

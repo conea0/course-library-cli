@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+
+	"github.com/titanous/json5"
 )
 
 type Test struct {
@@ -24,7 +26,7 @@ func NewTestCase(tests []Test) *TestCase {
 
 func TestCaseFromJSON(jsonBytes []byte) (*TestCase, error) {
 	var testCase *TestCase
-	err := json.Unmarshal(jsonBytes, &testCase)
+	err := json5.Unmarshal(jsonBytes, &testCase)
 	if err != nil {
 		return nil, err
 	}
