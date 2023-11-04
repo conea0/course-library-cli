@@ -68,7 +68,9 @@ func (t *Test) EvalTest(py string) error {
 
 	result, err := cmd.CombinedOutput()
 	if err != nil {
-		return fmt.Errorf(string(result))
+		line := "------------------------------------"
+		inputmsg := fmt.Sprintf("input:\n%v\n%v\n%v\n", line, t.Input, line)
+		return fmt.Errorf(inputmsg + string(result))
 	}
 	output := string(result)
 
