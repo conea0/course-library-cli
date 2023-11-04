@@ -17,6 +17,7 @@ func TestReadProblem(t *testing.T) {
 
 	testCase := map[string]interface{}{
 		"stmt":   "問題です。\n",
+		"help":   "ヘルプです。\n",
 		"input1": (*tc.Tests[0].Input)[0],
 		"code":   "gre = input()\n",
 	}
@@ -35,6 +36,7 @@ func TestReadProblem(t *testing.T) {
 	log.Printf("%+v", p)
 
 	assert.Equal(t, testCase["stmt"], p.Statement)
+	assert.Equal(t, testCase["help"], p.Help)
 	assert.Equal(t, testCase["input1"], (*p.TestCase.Tests[0].Input)[0])
 	assert.Equal(t, testCase["code"], p.Code)
 }
