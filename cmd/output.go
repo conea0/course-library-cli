@@ -39,9 +39,10 @@ func output(cmd *cobra.Command, args []string) {
 	for _, f := range paths {
 		err := exportProblemJSON(f)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "---------------------------------------ここから")
-			fmt.Fprintf(os.Stderr, "エラーが発生しました\n場所: %v\n%v\n", f, err)
-			fmt.Fprintln(os.Stderr, "---------------------------------------ここまで")
+			fullpath, _ := filepath.Abs(f)
+			fmt.Fprintln(os.Stderr, "#############################################")
+			fmt.Fprintf(os.Stderr, "エラーが発生しました\n場所: %v\n\n%v\n", fullpath, err)
+			fmt.Fprintln(os.Stderr, "#############################################")
 		}
 	}
 }
