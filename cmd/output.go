@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	yaml "gopkg.in/yaml.v2"
 
@@ -110,9 +111,12 @@ func exportProblemJSON(f string) error {
 		return err
 	}
 
+	// 模範解答のタブをスペース二つに置き換え
+	p.Code = strings.ReplaceAll(p.Code, "\t", "  ")
+
 	problemyaml, err := yaml.Marshal(p)
 	if err != nil {
-		return fmt.Errorf("jsonの出力に失敗しました: %w", err)
+		return fmt.Errorf("yamlの出力に失敗しました: %w", err)
 	}
 
 	outDir, err := getOutDir(f)
@@ -133,5 +137,5 @@ func exportProblemJSON(f string) error {
 }
 
 func getFileNameWithoutExt(path string) string {
-    return filepath.Base(path[:len(path)-len(filepath.Ext(path))])
+	return filepath.Base(path[:len(path)-len(filepath.Ext(path))])
 }
