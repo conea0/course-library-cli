@@ -167,7 +167,7 @@ func (m *Md) readTestcase(p *Problem) error {
 	tcJSON, err := TestCaseFromJSON([]byte(s))
 	if err != nil {
 		m.errors = append(m.errors, err)
-		m.errors = append(m.errors, fmt.Errorf(jsonErrMsg))
+		m.errors = append(m.errors, fmt.Errorf(jsonErrMsg, "```"))
 		return fmt.Errorf("cannot read test case block: %w", err)
 	}
 
@@ -248,6 +248,5 @@ func (m *Md) Error() string {
 
 const jsonErrMsg = `
 jsonの書き方を間違えている可能性があります。
-	- 最後の要素に,がないか確認してみてください
-	- jsonファイルに書き込んでみてください
-`
+	- %sjsonとなっているか確認してください
+	- jsonファイルに書き込んでみてください#`
