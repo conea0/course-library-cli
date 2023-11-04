@@ -10,6 +10,7 @@ import (
 // Problem is a struct that represents a problem in the course library.
 type Problem struct {
 	Statement string
+	Help string
 	TestCase  *TestCase
 	Code      string
 }
@@ -23,6 +24,8 @@ type ReadBlockFn func(*Problem) error
 const (
 	// StatementPre is a markdown prefix for the problem statement block.
 	StatementPre = "## 問題"
+
+	HelpPre = "### ヘルプ"
 	// TestcasePre is a markdown prefix for the test case block.
 	TestcasePre = "## テストケース"
 	// CodePre is a markdown prefix for the code block.
@@ -67,6 +70,7 @@ func NewMd(r io.Reader) *Md {
 	m.registerReadBlockFn(StatementPre, m.readStatement)
 	m.registerReadBlockFn(TestcasePre, m.readTestcase)
 	m.registerReadBlockFn(CodePre, m.readCode)
+	m.registerReadBlockFn(HelpPre, m.readHelp)
 
 	return m
 }
