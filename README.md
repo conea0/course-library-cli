@@ -31,8 +31,6 @@ clc init
 clc generate -p ./part1/002 -n 20
 ```
 
-## 実装予定
-
 ### outputの自動生成
 テストケースにinputを書けば、outputを自動生成することができます。
 [問題文の仕様](https://github.com/conea0/python-basic-course/wiki/%E5%95%8F%E9%A1%8C%E6%96%87%E3%81%AE%E4%BB%95%E6%A7%98)を参照してください。
@@ -47,19 +45,7 @@ clc output -p ./part1/001/problems
 clc output -p ./part1/001/problems/1.md
 ```
 
-### outputの削除
-テストケースのoutputのみを削除します。
-#### partごとの削除
-```sh
-clc clean -p ./part1/001/problems
-```
-
-#### 問題ごとの削除
-```sh
-clc clean -p ./part1/001/problems/1.md
-```
-
-## できれば10月中に...
+## 実装予定
 
 ### chatGPTを使用した自動問題生成
 以下のように`--auto`オプションをつけると、chatGPTが解説文をもとに、そのセクションに対する問題文を`-n`で指定した分だけ自動で生成します。　　
@@ -68,6 +54,9 @@ clc clean -p ./part1/001/problems/1.md
 ```sh
 clc g -p ./part1/001/ -n 10 --auto
 ```
+
+### get_inputの自動削除
+### ヘルプの抽出
 ## 未実装
 
 ### ローカルでテスト
