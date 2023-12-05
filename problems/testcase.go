@@ -29,7 +29,6 @@ func TestCaseFromJSON(jsonBytes []byte) (*TestCase, error) {
 	if err := json5.Unmarshal(jsonBytes, &rec); err != nil {
 		return nil, err
 	}
-	fmt.Println(rec)
 
 	testCase, err := getInput(rec)
 	if err != nil {
@@ -40,7 +39,6 @@ func TestCaseFromJSON(jsonBytes []byte) (*TestCase, error) {
 
 func getInput(rec map[string][]any) (*TestCase, error) {
 	tests := []Test{}
-	fmt.Println(rec)
 	for _, v := range rec["tests"] {
 		test := Test{}
 		testMap := v.(map[string]any)
