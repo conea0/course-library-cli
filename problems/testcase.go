@@ -25,12 +25,38 @@ func NewTestCase(tests []Test) *TestCase {
 }
 
 func TestCaseFromJSON(jsonBytes []byte) (*TestCase, error) {
-	var testCase *TestCase
-	err := json5.Unmarshal(jsonBytes, &testCase)
+	rec := map[string][]any{}
+	if err := json5.Unmarshal(jsonBytes, &rec); err != nil {
+		return nil, err
+	}
+
+	testCase, err := getInput(rec)
 	if err != nil {
 		return nil, err
 	}
 	return testCase, nil
+}
+
+func getInput(rec map[string][]any) (*TestCase, error) {
+	tests := []Test{}
+	for _, v := range rec["tests"] {
+		test := Test{}
+		testMap := v.(map[string]any)
+		if input, ok := testMap["input"]; ok {
+			input := input.([]any)
+			test.Input = &input
+		} else if input, ok := testMap["inputs"]; ok {
+			input := input.([]any)
+			test.Input = &input
+		} else {
+			return nil, fmt.Errorf("input not found")
+		}
+
+		test.Output = nil
+
+		tests = append(tests, test)
+	}
+	return NewTestCase(tests), nil
 }
 
 func (tc *TestCase) String() string {
